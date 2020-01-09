@@ -357,10 +357,6 @@ namespace UnityEngine.Rendering.HighDefinition
             RecursiveRendering recursiveSettings = VolumeManager.instance.stack.GetComponent<RecursiveRendering>();
             PathTracing pathTracingSettings = VolumeManager.instance.stack.GetComponent<PathTracing>();
 
-            // Status used to track the errors
-            AccelerationStructureStatus status = AccelerationStructureStatus.Clear;
-
-            // First of all let's process all the LOD groups
             LODGroup[] lodGroupArray = UnityEngine.GameObject.FindObjectsOfType<LODGroup>();
             for (var i = 0; i < lodGroupArray.Length; i++)
             {
@@ -381,7 +377,7 @@ namespace UnityEngine.Rendering.HighDefinition
                             Renderer currentRenderer = currentLOD.renderers[rendererIdx];
 
                             // This objects should but included into the RAS
-                            status |= AddInstanceToRAS(currentRenderer,
+                            AddInstanceToRAS(currentRenderer,
                                 rayTracedShadow,
                                 aoSettings.rayTracing.value, aoSettings.layerMask.value,
                                 reflSettings.rayTracing.value, reflSettings.layerMask.value,
@@ -424,7 +420,7 @@ namespace UnityEngine.Rendering.HighDefinition
                 if (gameObject.TryGetComponent<ReflectionProbe>(out reflectionProbe)) continue;
 
                 // This objects should but included into the RAS
-                status |= AddInstanceToRAS(currentRenderer,
+                AddInstanceToRAS(currentRenderer,
                                 rayTracedShadow,
                                 aoSettings.rayTracing.value, aoSettings.layerMask.value,
                                 reflSettings.rayTracing.value, reflSettings.layerMask.value,
@@ -438,10 +434,6 @@ namespace UnityEngine.Rendering.HighDefinition
 
             // tag the structures as valid
             m_ValidRayTracingState = true;
-
-            // Print a warning in case we hit a transparency issue
-            if (((int)status & (int)AccelerationStructureStatus.TransparencyIssue) != 0)
-                Debug.LogWarning("An object has both transparent and opaque submeshes. This may cause performance issues");
         }
 
         internal void BuildRayTracingLightCluster(CommandBuffer cmd, HDCamera hdCamera)
