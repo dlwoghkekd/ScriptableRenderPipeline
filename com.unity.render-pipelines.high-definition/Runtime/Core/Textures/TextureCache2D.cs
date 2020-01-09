@@ -51,7 +51,7 @@ namespace UnityEngine.Rendering.HighDefinition
             {
                 if (mismatch)
                 {
-                    cmd.ConvertTexture(textureArray[texIDx], 0, m_Cache, m_SliceSize * sliceIndex + texIDx);
+                    cmd.Blit(textureArray[texIDx], m_Cache, 0, m_SliceSize * sliceIndex + texIDx);
                 }
                 else
                 {
