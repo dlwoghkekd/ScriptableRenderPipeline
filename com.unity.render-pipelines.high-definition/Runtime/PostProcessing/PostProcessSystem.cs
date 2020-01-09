@@ -259,14 +259,14 @@ namespace UnityEngine.Rendering.HighDefinition
             m_FarBokehTileList          = null;
 
             // Cleanup Custom Post Process
-            var currentHDRP = HDRenderPipeline.currentAsset;
-            if (currentHDRP != null)
+            var defaultAsset = HDRenderPipeline.defaultAsset;
+            if (defaultAsset != null)
             {
-                foreach (var typeString in currentHDRP.beforeTransparentCustomPostProcesses)
+                foreach (var typeString in defaultAsset.beforeTransparentCustomPostProcesses)
                     CleanupCustomPostProcess(typeString);
-                foreach (var typeString in currentHDRP.beforePostProcessCustomPostProcesses)
+                foreach (var typeString in defaultAsset.beforePostProcessCustomPostProcesses)
                     CleanupCustomPostProcess(typeString);
-                foreach (var typeString in currentHDRP.afterPostProcessCustomPostProcesses)
+                foreach (var typeString in defaultAsset.afterPostProcessCustomPostProcesses)
                     CleanupCustomPostProcess(typeString);
 
                 void CleanupCustomPostProcess(string typeString)
@@ -475,7 +475,7 @@ namespace UnityEngine.Rendering.HighDefinition
                     {
                         using (new ProfilingScope(cmd, ProfilingSampler.Get(HDProfileId.CustomPostProcessBeforePP)))
                         {
-                            foreach (var typeString in HDRenderPipeline.currentAsset.beforePostProcessCustomPostProcesses)
+                            foreach (var typeString in HDRenderPipeline.defaultAsset.beforePostProcessCustomPostProcesses)
                                 RenderCustomPostProcess(cmd, camera, ref source, colorBuffer, Type.GetType(typeString));
                         }
                     }
@@ -576,7 +576,7 @@ namespace UnityEngine.Rendering.HighDefinition
                     {
                         using (new ProfilingScope(cmd, ProfilingSampler.Get(HDProfileId.CustomPostProcessAfterPP)))
                         {
-                            foreach (var typeString in HDRenderPipeline.currentAsset.afterPostProcessCustomPostProcesses)
+                            foreach (var typeString in HDRenderPipeline.defaultAsset.afterPostProcessCustomPostProcesses)
                                 RenderCustomPostProcess(cmd, camera, ref source, colorBuffer, Type.GetType(typeString));
                         }
                     }
@@ -2420,7 +2420,7 @@ namespace UnityEngine.Rendering.HighDefinition
             using (new ProfilingScope(cmd, ProfilingSampler.Get(HDProfileId.CustomPostProcessAfterOpaqueAndSky)))
             {
                 bool needsBlitToColorBuffer = false;
-                foreach (var typeString in HDRenderPipeline.currentAsset.beforeTransparentCustomPostProcesses)
+                foreach (var typeString in HDRenderPipeline.defaultAsset.beforeTransparentCustomPostProcesses)
                     needsBlitToColorBuffer |= RenderCustomPostProcess(cmd, camera, ref source, colorBuffer, Type.GetType(typeString));
 
                 if (needsBlitToColorBuffer)
