@@ -863,6 +863,11 @@ namespace UnityEngine.Rendering.HighDefinition
         public static readonly int _AODepthToViewParams            = Shader.PropertyToID("_AODepthToViewParams");
         public static readonly int _AOPackedBlurred                = Shader.PropertyToID("_AOPackedBlurred");
         public static readonly int _AOOutputHistory                = Shader.PropertyToID("_AOOutputHistory");
+
+        // BlitCubeTextureFace.shader
+        public static readonly int _InputTex                       = Shader.PropertyToID("_InputTex");
+        public static readonly int _LoD                            = Shader.PropertyToID("_LoD");
+        public static readonly int _FaceIndex                      = Shader.PropertyToID("_FaceIndex");
     }
 
     // Shared material property names

@@ -5,10 +5,6 @@ namespace UnityEngine.Rendering.HighDefinition
 {
     class ReflectionProbeCache
     {
-        internal static readonly int s_InputTexID = Shader.PropertyToID("_InputTex");
-        internal static readonly int s_LoDID = Shader.PropertyToID("_LoD");
-        internal static readonly int s_FaceIndexID = Shader.PropertyToID("_FaceIndex");
-
         enum ProbeFilteringState
         {
             Convolving,
@@ -121,11 +117,11 @@ namespace UnityEngine.Rendering.HighDefinition
         // We can't use Graphics.ConvertTexture here because it does not work with a RenderTexture as destination.
         void ConvertTexture(CommandBuffer cmd, Texture input, RenderTexture target)
         {
-            m_ConvertTextureMPB.SetTexture(s_InputTexID, input);
-            m_ConvertTextureMPB.SetFloat(s_LoDID, 0.0f); // We want to convert mip 0 to whatever the size of the destination cache is.
+            m_ConvertTextureMPB.SetTexture(HDShaderIDs._InputTex, input);
+            m_ConvertTextureMPB.SetFloat(HDShaderIDs._LoD, 0.0f); // We want to convert mip 0 to whatever the size of the destination cache is.
             for (int f = 0; f < 6; ++f)
             {
-                m_ConvertTextureMPB.SetFloat(s_FaceIndexID, (float)f);
+                m_ConvertTextureMPB.SetFloat(HDShaderIDs._FaceIndex, (float)f);
                 CoreUtils.SetRenderTarget(cmd, target, ClearFlag.None, Color.black, 0, (CubemapFace)f);
                 CoreUtils.DrawFullScreen(cmd, m_ConvertTextureMaterial, m_ConvertTextureMPB);
             }

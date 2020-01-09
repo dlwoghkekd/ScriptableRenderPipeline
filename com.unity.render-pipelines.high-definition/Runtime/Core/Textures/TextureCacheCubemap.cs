@@ -10,16 +10,21 @@ namespace UnityEngine.Rendering.HighDefinition
         const int k_NbFace = 6;
 
         // the member variables below are only in use when TextureCache.supportsCubemapArrayTextures is false
-        private Texture2DArray m_CacheNoCubeArray;
-        private RenderTexture[] m_StagingRTs;
-        private int m_NumPanoMipLevels;
-        private Material m_CubeBlitMaterial;
-        private int m_CubeMipLevelPropName;
-        private int m_cubeSrcTexPropName;
+        Texture2DArray m_CacheNoCubeArray;
+        RenderTexture[] m_StagingRTs;
+        int m_NumPanoMipLevels;
+        Material m_CubeBlitMaterial;
+        int m_CubeMipLevelPropName;
+        int m_cubeSrcTexPropName;
+        Material m_BlitCubemapFaceMaterial;
+        MaterialPropertyBlock m_BlitCubemapFaceProperties;
 
         public TextureCacheCubemap(string cacheName = "", int sliceSize = 1)
             : base(cacheName, sliceSize)
         {
+            var res = HDRenderPipeline.defaultAsset.renderPipelineResources;
+            m_BlitCubemapFaceMaterial = CoreUtils.CreateEngineMaterial(res.shaders.blitCubeTextureFacePS);
+            m_BlitCubemapFaceProperties = new MaterialPropertyBlock();
         }
 
         override protected bool TransferToSlice(CommandBuffer cmd, int sliceIndex, Texture[] textureArray)
@@ -56,9 +61,13 @@ namespace UnityEngine.Rendering.HighDefinition
                 {
                     if (mismatch)
                     {
+                        m_BlitCubemapFaceProperties.SetTexture(HDShaderIDs._InputTex, textureArray[texIDx]);
+                        m_BlitCubemapFaceProperties.SetFloat(HDShaderIDs._LoD, 0);
                         for (int f = 0; f < 6; f++)
                         {
-                            cmd.ConvertTexture(textureArray[texIDx], f, m_Cache, 6 * (m_SliceSize * sliceIndex + texIDx) + f);
+                            m_BlitCubemapFaceProperties.SetFloat(HDShaderIDs._FaceIndex, (float)f);
+                            CoreUtils.SetRenderTarget(cmd, m_Cache, ClearFlag.None, Color.black, depthSlice: 6 * (m_SliceSize * sliceIndex + texIDx) + f);
+                            CoreUtils.DrawFullScreen(cmd, m_BlitCubemapFaceMaterial, m_BlitCubemapFaceProperties);
                         }
                     }
                     else
@@ -121,7 +130,7 @@ namespace UnityEngine.Rendering.HighDefinition
                 {
                     // autoGenerateMips is true by default
                     dimension = TextureDimension.CubeArray,
-                    volumeDepth = numCubeMaps,
+                    volumeDepth = numCubeMaps * 6, // We need to multiply by the face count of a cubemap here
                     autoGenerateMips = false,
                     useMipMap = isMipMapped,
                 };
