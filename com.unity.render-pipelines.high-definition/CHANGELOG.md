@@ -280,6 +280,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed issue with motion blur sample weighting function.
 - Fixed motion vectors in MSAA.
 - Fixed sun flare blending (case 1205862).
+- Fixing unnecessary memory allocations in the ray tracing cluster build
 
 ### Changed
 - Color buffer pyramid is not allocated anymore if neither refraction nor distortion are enabled
