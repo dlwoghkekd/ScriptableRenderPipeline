@@ -425,7 +425,7 @@ VaryingsLean ShadowPassVertex(AttributesLean v)
 half4 ShadowPassFragment(VaryingsLean IN) : SV_TARGET
 {
 #ifdef _ALPHATEST_ON
-	ClipHoles(IN.texcoord);
+	ClipHoles(IN.texcoord.xy);
 #endif	
     return 0;
 }
@@ -447,7 +447,7 @@ VaryingsLean DepthOnlyVertex(AttributesLean v)
 half4 DepthOnlyFragment(VaryingsLean IN) : SV_TARGET
 {
 #ifdef _ALPHATEST_ON
-	ClipHoles(IN.texcoord);
+	ClipHoles(IN.texcoord.xy);
 #endif
 #ifdef SCENESELECTIONPASS
     // We use depth prepass for scene selection in the editor, this code allow to output the outline correctly
