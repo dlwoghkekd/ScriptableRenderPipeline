@@ -74,16 +74,23 @@ namespace UnityEngine.Rendering.HighDefinition
             var res = AllocTextureArray(numTextures);
             m_NumMipLevels = GetNumMips(width, height);
 
-            m_Cache = new RenderTexture(width, height, 0, format)
+            var desc = new RenderTextureDescriptor(width, width, format, 0)
             {
                 // autoGenerateMips is true by default
                 dimension = TextureDimension.Tex2DArray,
                 volumeDepth = numTextures,
                 useMipMap = isMipMapped,
+                msaaSamples = 1,
+            };
+
+            m_Cache = new RenderTexture(desc)
+            {
                 hideFlags = HideFlags.HideAndDontSave,
                 wrapMode = TextureWrapMode.Clamp,
                 name = CoreUtils.GetTextureAutoName(width, height, format, TextureDimension.Tex2DArray, depth: numTextures, name: m_CacheName)
             };
+
+            m_Cache.Create();
 
             return res;
         }

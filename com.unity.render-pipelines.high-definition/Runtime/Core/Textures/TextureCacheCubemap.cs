@@ -128,11 +128,11 @@ namespace UnityEngine.Rendering.HighDefinition
             {
                 var desc = new RenderTextureDescriptor(width, width, format, 0)
                 {
-                    // autoGenerateMips is true by default
                     dimension = TextureDimension.CubeArray,
                     volumeDepth = numCubeMaps * 6, // We need to multiply by the face count of a cubemap here
                     autoGenerateMips = false,
                     useMipMap = isMipMapped,
+                    msaaSamples = 1,
                 };
 
                 m_Cache = new RenderTexture(desc)
@@ -143,6 +143,8 @@ namespace UnityEngine.Rendering.HighDefinition
                     anisoLevel = 0, // It is important to set 0 here, else unity force anisotropy filtering
                     name = CoreUtils.GetTextureAutoName(width, width, format, desc.dimension, depth: numCubeMaps, name: m_CacheName, mips: isMipMapped)
                 };
+
+                m_Cache.Create();
             }
 
             return res;
