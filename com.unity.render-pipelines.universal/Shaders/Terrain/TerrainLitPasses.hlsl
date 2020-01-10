@@ -292,7 +292,7 @@ Varyings SplatmapVert(Attributes v)
 half4 SplatmapFragment(Varyings IN) : SV_TARGET
 {
 #ifdef _ALPHATEST_ON
-	ClipHoles(IN.uvMainAndLM);
+	ClipHoles(IN.uvMainAndLM.xy);
 #endif	
 
     half3 normalTS = half3(0.0h, 0.0h, 1.0h);
@@ -447,7 +447,7 @@ VaryingsLean DepthOnlyVertex(AttributesLean v)
 half4 DepthOnlyFragment(VaryingsLean IN) : SV_TARGET
 {
 #ifdef _ALPHATEST_ON
-	ClipHoles(IN.texcoord.xy);
+	ClipHoles(IN.texcoord);
 #endif
 #ifdef SCENESELECTIONPASS
     // We use depth prepass for scene selection in the editor, this code allow to output the outline correctly
