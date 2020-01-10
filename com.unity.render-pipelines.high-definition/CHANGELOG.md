@@ -279,6 +279,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed errors that occurred when using invalid near and far clip plane values for planar reflections.
 - Fixed issue with motion blur sample weighting function.
 - Fixed motion vectors in MSAA.
+- Fixed sun flare blending (case 1205862).
+- Fixed a lot of issues related to ray traced screen space shadows.
+- Fixed memory leak caused by apply distortion material not being disposed.
+- Fixed Reflection probe incorrectly culled when moving its parent (case 1207660)
 
 ### Changed
 - Color buffer pyramid is not allocated anymore if neither refraction nor distortion are enabled
@@ -328,6 +332,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Ray tracing reflection temporal filtering is now done in pre-exposed space
 - Search field selects the appropriate fields in both project settings panels 'HDRP Default Settings' and 'Quality/HDRP'
 - Disabled the refraction and transmission map keywords if the material is opaque.
+- Keep celestial bodies outside the atmosphere.
+- Updated the MSAA documentation to specify what features HDRP supports MSAA for and what features it does not.
 - Improved performance when entering play mode without domain reload by a factor of ~25
 
 ## [7.1.1] - 2019-09-05
