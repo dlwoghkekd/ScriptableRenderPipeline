@@ -292,7 +292,7 @@ Varyings SplatmapVert(Attributes v)
 half4 SplatmapFragment(Varyings IN) : SV_TARGET
 {
 #ifdef _ALPHATEST_ON
-	ClipHoles(IN.uvMainAndLM.xy);
+	ClipHoles(IN.uvMainAndLM);
 #endif	
 
     half3 normalTS = half3(0.0h, 0.0h, 1.0h);
@@ -425,7 +425,7 @@ VaryingsLean ShadowPassVertex(AttributesLean v)
 half4 ShadowPassFragment(VaryingsLean IN) : SV_TARGET
 {
 #ifdef _ALPHATEST_ON
-	ClipHoles(IN.texcoord.xy);
+	ClipHoles(IN.texcoord);
 #endif	
     return 0;
 }
