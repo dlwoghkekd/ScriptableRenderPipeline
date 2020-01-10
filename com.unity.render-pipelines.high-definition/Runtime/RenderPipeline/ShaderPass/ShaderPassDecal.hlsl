@@ -89,11 +89,12 @@ void Frag(  PackedVaryingsToPS packedInput,
     {
         if ((minTileCoord1d == tileCoord1d) && (clipValue > 0.0))// if this is the current tile and not a helper lane
         {
+            // calculate the mask across the current tile
+            mask = WaveActiveBitOr(surfaceData.HTileMask);
+
             // Is it the first active lane?
             if(WaveIsFirstLane())
             {
-                // calculate the mask across the current tile once
-                mask = WaveActiveBitOr(surfaceData.HTileMask);
                 // recalculate tileCoord1d, because on Xbox the register holding its value gets overwritten
                 if (tileCoord1d != -1)
                 {
